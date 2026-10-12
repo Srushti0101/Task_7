@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2 class="hello">Hello, {{ user.first_name|default:user.username }} </h2>
+  <p class="muted">Here's what's on your plate today.</p>
+
+  <div class="stats">
+    <div class="stat s1"><b>{{ total }}</b><span>Total</span></div>
+    <div class="stat s2"><b>{{ pending }}</b><span>Pending</span></div>
+    <div class="stat s3"><b>{{ done }}</b><span>Completed</span></div>
+  </div>
+
+  <form class="add" action="{% url 'add_task' %}" method="post">
+    {% csrf_token %}
+    {{ form.title }}
+    {{ form.priority }}
+    <button class="btn btn-primary">+ Add</button>
+  </form>
+
+  <div class="tasks">
+    {% for t in tasks %}
+    <div class="task {% if t.done %}done{% endif %}">
+      <form action="{% url 'toggle_task' t.pk %}" method="post">
+        {% csrf_token %}
+        <button class="check">{% if t.done %}✔{% endif %}</button>
+      </form>
+      <div class="ttl">{{ t.title }}</div>
+      <span class="tag {{ t.priority|lower }}">{{ t.priority }}</span>
+      <form action="{% url 'delete_task' t.pk %}" method="post">
+        {% csrf_token %}
+        <button class="del" title="Delete">🗑</button>
+      </form>
+    </div>
+    {% empty %}
+    <div class="empty">No tasks yet — add your first one above!</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

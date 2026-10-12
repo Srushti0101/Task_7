@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-card">
+  <h1>Welcome back</h1>
+  <p class="muted">Log in to see your tasks.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <label>{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    <button class="btn btn-primary full">Login</button>
+  </form>
+  <p class="muted center">New here? <a href="{% url 'register' %}">Create an account</a></p>
+</div>
+{% endblock %}

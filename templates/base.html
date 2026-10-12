@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskMate</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <nav class="nav">
+    <div class="logo">Task</div>
+    <div class="nav-right">
+      <span class="avatar">{{ user.first_name|default:user.username|slice:":1"|upper }}</span>
+      <span class="uname">{{ user.first_name|default:user.username }}</span>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-ghost">Logout</button>
+      </form>
+    </div>
+  </nav>
+  {% endif %}
+  <main>
+    {% for m in messages %}
+      <div class="flash {{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
